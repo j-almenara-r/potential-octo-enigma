@@ -3,6 +3,7 @@ package com.vehicledynamics.collector
 import android.Manifest
 import android.content.BroadcastReceiver
 import android.content.Context
+import android.content.Context.RECEIVER_NOT_EXPORTED
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
