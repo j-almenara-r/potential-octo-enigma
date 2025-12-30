@@ -7,14 +7,20 @@ import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.location.Location
 import android.os.Looper
+import android.util.Log
 import com.google.android.gms.location.*
 import com.vehicledynamics.collector.vss.*
+import kotlin.math.toDegrees
 
 /**
  * Sensor data collector that manages all smartphone sensors
  * for vehicle dynamics data collection
  */
 class SensorDataCollector(private val context: Context) : SensorEventListener {
+
+    companion object {
+        private const val TAG = "SensorDataCollector"
+    }
 
     private val sensorManager: SensorManager = 
         context.getSystemService(Context.SENSOR_SERVICE) as SensorManager
@@ -106,7 +112,7 @@ class SensorDataCollector(private val context: Context) : SensorEventListener {
                 Looper.getMainLooper()
             )
         } catch (e: SecurityException) {
-            // Handle missing permission
+            Log.w(TAG, "Location permission not granted: ${e.message}")
         }
     }
     
@@ -148,9 +154,9 @@ class SensorDataCollector(private val context: Context) : SensorEventListener {
                 Sensor.TYPE_GYROSCOPE -> {
                     // Gyroscope values in rad/s, convert to degrees/s
                     currentAngularVelocity = VSSAngularVelocity(
-                        roll = Math.toDegrees(it.values[0].toDouble()).toFloat(),
-                        pitch = Math.toDegrees(it.values[1].toDouble()).toFloat(),
-                        yaw = Math.toDegrees(it.values[2].toDouble()).toFloat()
+                        roll = toDegrees(it.values[0].toDouble()).toFloat(),
+                        pitch = toDegrees(it.values[1].toDouble()).toFloat(),
+                        yaw = toDegrees(it.values[2].toDouble()).toFloat()
                     )
                 }
             }

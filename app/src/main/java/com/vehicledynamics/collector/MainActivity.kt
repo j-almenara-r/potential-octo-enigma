@@ -66,7 +66,11 @@ class MainActivity : AppCompatActivity() {
         
         // Register broadcast receiver for Android Auto commands
         val filter = IntentFilter("com.vehicledynamics.collector.TOGGLE_COLLECTION")
-        registerReceiver(collectionReceiver, filter, RECEIVER_NOT_EXPORTED)
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+            registerReceiver(collectionReceiver, filter, RECEIVER_NOT_EXPORTED)
+        } else {
+            registerReceiver(collectionReceiver, filter)
+        }
         
         // Check and request permissions
         checkPermissions()
